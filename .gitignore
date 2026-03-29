@@ -1,0 +1,21 @@
+# Senhas e credenciais — NUNCA commitar!
+.env
+db.json
+
+# Pastas e arquivos compilados do Python
+__pycache__/
+*.pyc
+venv/
+
+# Logs gerados pela API em runtime
+backend/logs/
+acessos_api.txt
+
+# Arquivos temporários de diagnóstico e debug
+arquivos_antigos_logs/
+tabelas_finais.txt
+*.txt
+
+# Arquivos de sistema
+.DS_Store
+Thumbs.db
