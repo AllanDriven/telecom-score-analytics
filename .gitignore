@@ -1,5 +1,6 @@
 # Senhas e credenciais — NUNCA commitar!
 .env
+dbt.json
 db.json
 
 # Pastas e arquivos compilados do Python
