@@ -1,13 +1,10 @@
 USE [Telecom]
 GO
-
-/****** Object:  StoredProcedure [dbo].[SP_TAB_TELECOM_SCORE_NUMEROS]    Script Date: 04/03/2026 13:26:20 ******/
+/****** Object:  StoredProcedure [dbo].[SP_TAB_TELECOM_SCORE_NUMEROS]    Script Date: 29/03/2026 14:39:13 ******/
 SET ANSI_NULLS ON
 GO
-
 SET QUOTED_IDENTIFIER ON
 GO
-
 
 ALTER   PROCEDURE [dbo].[SP_TAB_TELECOM_SCORE_NUMEROS]
 AS
@@ -75,17 +72,20 @@ BEGIN
                 -- Obs: A condição "> 90%" já foi capturada pela linha acima.
                 WHEN TOTAL_DISPAROS >= 20 AND TAXA_ISDN1 <= 0.90 AND TOTAL_ALO = 0 THEN 1.5
                 
-                -- SCORE 5: Menos de 20 chamadas OU Taxa de alô maior que 20%
-                WHEN TOTAL_DISPAROS < 20 OR TAXA_ALO > 0.20 THEN 5.0
+                -- SCORE 1.6: Taxa de alo de até 1% (excluindo 0% que é Sc 1.5)
+                WHEN TOTAL_DISPAROS >= 20 AND TAXA_ALO <= 0.01 THEN 1.6
                 
-                -- SCORE 2: Taxa de alo de até 5% (0% a 5%)
-                WHEN TOTAL_DISPAROS >= 20 AND TAXA_ALO <= 0.05 THEN 2.0
+                -- SCORE 2: Taxa de alo entre 1% e 5% (0.01 a 0.05)
+                WHEN TOTAL_DISPAROS >= 20 AND TAXA_ALO > 0.01 AND TAXA_ALO <= 0.05 THEN 2.0
                 
                 -- SCORE 3: Taxa de alo de 5% a 10% (0.05 a 0.10)
                 WHEN TOTAL_DISPAROS >= 20 AND TAXA_ALO > 0.05 AND TAXA_ALO <= 0.10 THEN 3.0
                 
                 -- SCORE 4: Taxa de alo de 10% a 20% (0.10 a 0.20)
                 WHEN TOTAL_DISPAROS >= 20 AND TAXA_ALO > 0.10 AND TAXA_ALO <= 0.20 THEN 4.0
+				
+                -- SCORE 5: Menos de 20 chamadas OU Taxa de alô maior que 20%
+                WHEN TOTAL_DISPAROS < 20 OR TAXA_ALO > 0.20 THEN 5.0
                 
                 -- Fallback por segurança
                 ELSE 5.0 
@@ -101,5 +101,3 @@ BEGIN
 
 
 END;
-GO
-

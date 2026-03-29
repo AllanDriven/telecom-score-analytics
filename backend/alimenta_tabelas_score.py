@@ -46,7 +46,7 @@ def main():
         print("Banco de dados conectado.")
 
         hoje = date.today()
-        dias_desejados = {hoje - timedelta(days=i) for i in range(1, 31)}
+        dias_desejados = {hoje - timedelta(days=i) for i in range(1, 61)}
 
         # ==========================================================
         # LÓGICA DE DIAS FALTANTES - NÚMEROS DISCADOS
@@ -54,7 +54,7 @@ def main():
         print("\nConsultando os dias já existentes na TAB_TELECOM_NUMEROS_DISCADOS...")
         cursor.execute("""
             SELECT DISTINCT [DATE] FROM dbo.TAB_TELECOM_NUMEROS_DISCADOS
-            WHERE [DATE] >= CAST(DATEADD(DAY, -30, GETDATE()) AS DATE)
+            WHERE [DATE] >= CAST(DATEADD(DAY, -60, GETDATE()) AS DATE)
         """)
         dias_faltantes = sorted(list(dias_desejados - {row[0] for row in cursor.fetchall()}))
         qtd_discados = len(dias_faltantes)
@@ -97,7 +97,7 @@ def main():
         print("\nConsultando os dias já existentes na TAB_TELECOM_SCORE_CARTEIRAS (V1)...")
         cursor.execute("""
             SELECT DISTINCT [DATE] FROM dbo.TAB_TELECOM_SCORE_CARTEIRAS
-            WHERE [DATE] >= CAST(DATEADD(DAY, -30, GETDATE()) AS DATE)
+            WHERE [DATE] >= CAST(DATEADD(DAY, -60, GETDATE()) AS DATE)
         """)
         dias_faltantes_v1 = sorted(list(dias_desejados - {row[0] for row in cursor.fetchall()}))
         qtd_carteiras_v1 = len(dias_faltantes_v1)
@@ -118,7 +118,7 @@ def main():
         print("\nConsultando os dias já existentes na TAB_TELECOM_SCORE_CARTEIRAS_V2...")
         cursor.execute("""
             SELECT DISTINCT [DATE] FROM dbo.TAB_TELECOM_SCORE_CARTEIRAS_V2
-            WHERE [DATE] >= CAST(DATEADD(DAY, -30, GETDATE()) AS DATE)
+            WHERE [DATE] >= CAST(DATEADD(DAY, -60, GETDATE()) AS DATE)
         """)
         dias_faltantes_v2 = sorted(list(dias_desejados - {row[0] for row in cursor.fetchall()}))
         qtd_carteiras_v2 = len(dias_faltantes_v2)

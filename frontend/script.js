@@ -188,10 +188,10 @@ function atualizarKPIs(dados) {
         const custo = parseFloat(d.CUSTO_TOTAL) || 0;
         v.total += vol;
 
-        if (scoreVal <= 1)           { v.critica += vol; c.critica += custo; }
-        else if (scoreVal <= 1.9)    { v.ruim    += vol; c.ruim    += custo; }
-        else if (scoreVal <= 3.9)    { v.media   += vol; c.media   += custo; }
-        else                         { v.boa     += vol; c.boa     += custo; }
+        if (scoreVal <= 1)                      { v.critica += vol; c.critica += custo; }
+        else if (scoreVal > 1 && scoreVal < 2)  { v.ruim    += vol; c.ruim    += custo; }
+        else if (scoreVal >= 2 && scoreVal < 4) { v.media   += vol; c.media   += custo; }
+        else if (scoreVal >= 4)                 { v.boa     += vol; c.boa     += custo; }
     });
 
     document.getElementById('kpiCritica').innerText = calcPct(v.critica, v.total) + '%';
@@ -288,7 +288,8 @@ function desenharGraficoLinha(dados, canvasId, isCusto = false) {
         todosScores.add(nomeScore(d));
     });
 
-    const labels = Object.keys(agrupado).sort();
+    let labels = Object.keys(agrupado).sort();
+    if (labels.length > 30) labels = labels.slice(-30); // Garante a visão máxima de 30 dias
     const scoresOrdenados = Array.from(todosScores).sort((a, b) => parseFloat(a.split(' ')[1]) - parseFloat(b.split(' ')[1]));
 
     const datasets = scoresOrdenados.map(sc => {
