@@ -1,310 +1,346 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Score Telecom - Concentrix</title>
     <link rel="icon" type="image/png" href="files/icone.png">
-    
+
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    
+
     <link rel="stylesheet" href="style.css">
-    
+
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
+
 <body>
 
-<nav class="navbar mb-4 py-3">
-    <div class="container-fluid px-4 d-flex justify-content-between align-items-center">
-        
-        <a class="navbar-brand d-flex align-items-center" href="#">
-            Telecom Score Analytics
-            <span class="ms-3 badge rounded-pill bg-secondary text-white" 
-                  style="font-size: 0.9rem; cursor: help; padding: 6px 10px;"
-                  data-bs-toggle="tooltip" 
-                  data-bs-html="true" 
-                  title="
+    <nav class="navbar mb-4 py-3">
+        <div class="container-fluid px-4 d-flex justify-content-between align-items-center">
+
+            <a class="navbar-brand d-flex align-items-center" href="#">
+                Telecom Score Analytics
+                <span class="ms-3 badge rounded-pill bg-secondary text-white"
+                    style="font-size: 0.9rem; cursor: help; padding: 6px 10px;" data-bs-toggle="tooltip"
+                    data-bs-html="true" title="
                     <b>SCORE 0:</b><br>&bull; Menos de 10 ou mais de 11 dígitos<br>&bull; DDD inexistente<hr class='my-1'>
-                    <b>SCORE 1:</b><br>&bull; ISDN 1 > 90% das tentativas<br>&bull; Nenhum alô<hr class='my-1'>
-                    <b>SCORE 1.5:</b><br>&bull; ISDN 1 <= 90% das tentativas<br>&bull; Nenhum alô<hr class='my-1'>
-                    <b>SCORE 2:</b><br>&bull; Taxa de alô até 5%<hr class='my-1'>
-                    <b>SCORE 3:</b><br>&bull; Taxa de alô de 5% a 10%<hr class='my-1'>
-                    <b>SCORE 4:</b><br>&bull; Taxa de alô de 10% a 20%<hr class='my-1'>
+                    <b>SCORE 1:</b><br>&bull; ISDN 1 mais de 90% das tentativas<br>&bull; Nenhum alô<hr class='my-1'>
+                    <b>SCORE 1.5:</b><br>&bull; Nenhum alô<hr class='my-1'>
+                    <b>SCORE 1.6:</b><br>&bull; Taxa de alô até 1%<hr class='my-1'>
+                    <b>SCORE 2:</b><br>&bull; Taxa de alô entre 1% a 5%<hr class='my-1'>
+                    <b>SCORE 3:</b><br>&bull; Taxa de alô entre 5% a 10%<hr class='my-1'>
+                    <b>SCORE 4:</b><br>&bull; Taxa de alô dentre 10% a 20%<hr class='my-1'>
                     <b>SCORE 5:</b><br>&bull; Taxa de alô > 20%<br>&bull; Ou < 20 tentativas na base
                   ">
-                ?
-            </span>
-        </a>
+                    ?
+                </span>
+            </a>
 
-        <div>
-            <img src="files/logo.png" alt="Logo Concentrix" style="height: 40px; object-fit: contain;">
+            <div>
+                <img src="files/logo.png" alt="Logo Concentrix" style="height: 40px; object-fit: contain;">
+            </div>
+
         </div>
+    </nav>
 
+    <div class="container-fluid px-4">
+        <ul class="nav nav-tabs" id="myTab" role="tablist">
+            <li class="nav-item" role="presentation">
+                <button class="nav-link active" id="bi-tab" data-bs-toggle="tab" data-bs-target="#bi"
+                    type="button">Dashboard Visual</button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="custo-tab" data-bs-toggle="tab" data-bs-target="#custo"
+                    type="button">Dashboard de Custo</button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="extracao-tab" data-bs-toggle="tab" data-bs-target="#extracao"
+                    type="button">Extração de Dados</button>
+            </li>
+        </ul>
+
+        <div class="tab-content" id="myTabContent">
+            <div class="tab-pane fade show active" id="bi">
+
+                <div class="filter-panel">
+                    <div class="row g-3">
+                        <div class="col-md-2">
+                            <label class="form-label">1. Executivo</label>
+                            <select id="filtroExecutivo" class="form-select" onchange="aoMudarFiltro(1)">
+                                <option value="">Todos</option>
+                            </select>
+                        </div>
+                        <div class="col-md-2">
+                            <label class="form-label">2. Carteira</label>
+                            <select id="filtroCarteira" class="form-select" onchange="aoMudarFiltro(2)">
+                                <option value="">Todas</option>
+                            </select>
+                        </div>
+                        <div class="col-md-2">
+                            <label class="form-label">3. Servidor</label>
+                            <select id="filtroServidor" class="form-select" multiple size="4"
+                                onchange="aoMudarFiltro(3)"></select>
+                            <span class="small-hint">Segure CTRL para múltiplos</span>
+                        </div>
+                        <div class="col-md-2">
+                            <label class="form-label">4. Fila</label>
+                            <select id="filtroFila" class="form-select" multiple size="4"
+                                onchange="aoMudarFiltro(4)"></select>
+                            <span class="small-hint">Segure CTRL para múltiplos</span>
+                        </div>
+                        <div class="col-md-2">
+                            <label class="form-label">5. Mailing</label>
+                            <select id="filtroMailing" class="form-select" multiple size="4"
+                                onchange="aoMudarFiltro(5)"></select>
+                            <span class="small-hint">Segure CTRL para múltiplos</span>
+                        </div>
+                        <div class="col-md-2">
+                            <label class="form-label">Data</label>
+                            <select id="filtroData" class="form-select" onchange="aplicarFiltros()">
+                                <option value="">Todas as Datas</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row mb-2">
+                    <div class="col-md-3">
+                        <div class="custom-card">
+                            <div class="kpi-title">Taxa Crítica (Sc 0 e 1)</div>
+                            <div class="kpi-value" style="color: #CC3262;" id="kpiCritica">0%</div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="custom-card">
+                            <div class="kpi-title">Taxa Ruim (Sc 1.5)</div>
+                            <div class="kpi-value" style="color: #FF8400;" id="kpiRuim">0%</div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="custom-card">
+                            <div class="kpi-title">Taxa Média (Sc 2 a 3)</div>
+                            <div class="kpi-value" style="color: #007380;" id="kpiMedia">0%</div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="custom-card">
+                            <div class="kpi-title">Taxa Boa (Sc 4 a 5)</div>
+                            <div class="kpi-value" style="color: #01704d;" id="kpiBoa">0%</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-12">
+                        <div class="custom-card">
+                            <div class="chart-title">Evolução Diária de Qualidade (Últimos 30 Dias)</div>
+                            <div class="chart-container-large"><canvas id="graficoLinha"></canvas></div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-4">
+                        <div class="custom-card">
+                            <div class="chart-title">Distribuição Global de Scores</div>
+                            <div class="chart-container"><canvas id="graficoPizza"></canvas></div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-4">
+                        <div class="custom-card">
+                            <div class="chart-title">Análise por Fila de Atendimento</div>
+                            <div class="scroll-wrapper">
+                                <div class="chart-container" id="containerFila"><canvas id="graficoFila"></canvas></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-4">
+                        <div class="custom-card">
+                            <div class="chart-title">Análise por Mailing Base</div>
+                            <div class="scroll-wrapper">
+                                <div class="chart-container" id="containerMailing"><canvas id="graficoMailing"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="tab-pane fade" id="custo">
+                <div class="row mb-2">
+                    <div class="col-md-3">
+                        <div class="custom-card">
+                            <div class="kpi-title">Custo Crítico (Sc 0 e 1)</div>
+                            <div class="kpi-value" style="color: #CC3262;" id="kpiCriticaCusto">R$ 0,00</div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="custom-card">
+                            <div class="kpi-title">Custo Ruim (Sc 1.5)</div>
+                            <div class="kpi-value" style="color: #FF8400;" id="kpiRuimCusto">R$ 0,00</div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="custom-card">
+                            <div class="kpi-title">Custo Médio (Sc 2 a 3)</div>
+                            <div class="kpi-value" style="color: #007380;" id="kpiMediaCusto">R$ 0,00</div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="custom-card">
+                            <div class="kpi-title">Custo Bom (Sc 4 a 5)</div>
+                            <div class="kpi-value" style="color: #01704d;" id="kpiBoaCusto">R$ 0,00</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-12">
+                        <div class="custom-card">
+                            <div class="chart-title">Evolução Diária de Investimento (R$)</div>
+                            <div class="chart-container-large"><canvas id="graficoLinhaCusto"></canvas></div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="custom-card">
+                            <div class="chart-title">Distribuição do Custo por Score</div>
+                            <div class="chart-container"><canvas id="graficoPizzaCusto"></canvas></div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="custom-card">
+                            <div class="chart-title">Custo por Fila (R$)</div>
+                            <div class="scroll-wrapper">
+                                <div class="chart-container" id="containerFilaCusto"><canvas
+                                        id="graficoFilaCusto"></canvas></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="custom-card">
+                            <div class="chart-title">Custo por Mailing (R$)</div>
+                            <div class="scroll-wrapper">
+                                <div class="chart-container" id="containerMailingCusto"><canvas
+                                        id="graficoMailingCusto"></canvas></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="tab-pane fade" id="extracao">
+                <div class="row">
+
+                    <div class="col-md-6">
+                        <div class="custom-card h-100">
+                            <h4 class="mb-3">Resumo de Discagens por Score</h4>
+                            <p class="text-muted" style="font-size: 0.9rem;">
+                                Exporta os dados consolidados (tabela de carteiras).
+                                <strong>Atenção:</strong> Esta extração obedece os filtros que você deixou selecionados
+                                lá na Aba 1 (Dashboard).
+                            </p>
+                            <button class="btn btn-corporativo mt-3" onclick="exportarResumo()">📥 Baixar Resumo
+                                (CSV)</button>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="custom-card h-100">
+                            <h4 class="mb-3">Exportação de Números Discados</h4>
+                            <p class="text-muted" style="font-size: 0.9rem;">
+                                Exporta os telefones únicos de um dia específico.
+                                (Data, Executivo e Carteira são obrigatórios).
+                            </p>
+
+                            <div class="row g-2 mb-3">
+                                <div class="col-md-6">
+                                    <label class="form-label mb-1">Data *</label>
+                                    <select id="extData" class="form-select form-select-sm"></select>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label mb-1">Executivo *</label>
+                                    <select id="extExec" class="form-select form-select-sm"
+                                        onchange="atualizarCarteirasExtracao()">
+                                        <option value="">Selecione...</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label mb-1">Carteira *</label>
+                                    <select id="extCart" class="form-select form-select-sm"
+                                        onchange="atualizarOpcionaisExtracao()">
+                                        <option value="">Selecione Executivo primeiro...</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label mb-1">Score (Opcional)</label>
+                                    <select id="extScore" class="form-select form-select-sm">
+                                        <option value="">Todos</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label mb-1">Fila (Opcional)</label>
+                                    <select id="extFila" class="form-select form-select-sm">
+                                        <option value="">Todas</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label mb-1">Mailing (Opcional)</label>
+                                    <select id="extMailing" class="form-select form-select-sm">
+                                        <option value="">Todos</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <button id="btnGerarExt" class="btn btn-corporativo mt-3" onclick="exportarNumeros()">📥
+                                Gerar Base (CSV)</button>
+                            <span id="loadingExt" class="ms-2 text-secondary"
+                                style="display: none; font-size: 0.85rem;">⏳ Buscando no banco, aguarde...</span>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="row mt-4">
+                    <div class="col-12">
+                        <div class="custom-card">
+                            <h4 class="mb-3">Consulta de Score por Número</h4>
+                            <p class="text-muted" style="font-size: 0.9rem;">
+                                Consulte o score de números específicos digitando um telefone único ou subindo um
+                                arquivo <b>.txt</b> com uma lista (um número por linha).
+                            </p>
+
+                            <div class="row g-3 align-items-center mb-3">
+                                <div class="col-md-3">
+                                    <label class="form-label mb-1">Número Único</label>
+                                    <input type="text" id="inputNumeroScore" class="form-control"
+                                        placeholder="Ex: 41996713055">
+                                </div>
+                                <div class="col-md-4">
+                                    <label class="form-label mb-1">Ou Lote (Arquivo .txt)</label>
+                                    <input type="file" id="inputFileScore" class="form-control" accept=".txt">
+                                </div>
+                                <div class="col-md-3">
+                                    <label class="form-label d-block mb-1">&nbsp;</label>
+                                    <button class="btn btn-outline-secondary btn-sm" onclick="baixarModeloTXT()">📄
+                                        Baixar Modelo TXT</button>
+                                </div>
+                            </div>
+
+                            <button id="btnConsultarScore" class="btn btn-corporativo"
+                                onclick="consultarScoreNumeros()">🔍 Consultar Base (CSV)</button>
+                            <span id="loadingScore" class="ms-2 text-secondary"
+                                style="display: none; font-size: 0.85rem;">⏳ Vasculhando base, aguarde...</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
-</nav>
 
-<div class="container-fluid px-4">
-    <ul class="nav nav-tabs" id="myTab" role="tablist">
-        <li class="nav-item" role="presentation">
-            <button class="nav-link active" id="bi-tab" data-bs-toggle="tab" data-bs-target="#bi" type="button">Dashboard Visual</button>
-        </li>
-        <li class="nav-item" role="presentation">
-            <button class="nav-link" id="custo-tab" data-bs-toggle="tab" data-bs-target="#custo" type="button">Dashboard de Custo</button>
-        </li>
-        <li class="nav-item" role="presentation">
-            <button class="nav-link" id="extracao-tab" data-bs-toggle="tab" data-bs-target="#extracao" type="button">Extração de Dados</button>
-        </li>
-    </ul>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
-    <div class="tab-content" id="myTabContent">
-        <div class="tab-pane fade show active" id="bi">
-            
-            <div class="filter-panel">
-                <div class="row g-3">
-                    <div class="col-md-2">
-                        <label class="form-label">1. Executivo</label>
-                        <select id="filtroExecutivo" class="form-select" onchange="aoMudarFiltro(1)"><option value="">Todos</option></select>
-                    </div>
-                    <div class="col-md-2">
-                        <label class="form-label">2. Carteira</label>
-                        <select id="filtroCarteira" class="form-select" onchange="aoMudarFiltro(2)"><option value="">Todas</option></select>
-                    </div>
-                    <div class="col-md-2">
-                        <label class="form-label">3. Servidor</label>
-                        <select id="filtroServidor" class="form-select" multiple size="4" onchange="aoMudarFiltro(3)"></select>
-                        <span class="small-hint">Segure CTRL para múltiplos</span>
-                    </div>
-                    <div class="col-md-2">
-                        <label class="form-label">4. Fila</label>
-                        <select id="filtroFila" class="form-select" multiple size="4" onchange="aoMudarFiltro(4)"></select>
-                        <span class="small-hint">Segure CTRL para múltiplos</span>
-                    </div>
-                    <div class="col-md-2">
-                        <label class="form-label">5. Mailing</label>
-                        <select id="filtroMailing" class="form-select" multiple size="4" onchange="aoMudarFiltro(5)"></select>
-                        <span class="small-hint">Segure CTRL para múltiplos</span>
-                    </div>
-                    <div class="col-md-2">
-                        <label class="form-label">Data</label>
-                        <select id="filtroData" class="form-select" onchange="aplicarFiltros()"><option value="">Todas as Datas</option></select>
-                    </div>
-                </div>
-            </div>
-
-            <div class="row mb-2">
-                <div class="col-md-3">
-                    <div class="custom-card">
-                        <div class="kpi-title">Taxa Crítica (Sc 0 e 1)</div>
-                        <div class="kpi-value" style="color: #CC3262;" id="kpiCritica">0%</div>
-                    </div>
-                </div>
-                <div class="col-md-3">
-                    <div class="custom-card">
-                        <div class="kpi-title">Taxa Ruim (Sc 1.5)</div>
-                        <div class="kpi-value" style="color: #FF8400;" id="kpiRuim">0%</div>
-                    </div>
-                </div>
-                <div class="col-md-3">
-                    <div class="custom-card">
-                        <div class="kpi-title">Taxa Média (Sc 2 a 3)</div>
-                        <div class="kpi-value" style="color: #007380;" id="kpiMedia">0%</div>
-                    </div>
-                </div>
-                <div class="col-md-3">
-                    <div class="custom-card">
-                        <div class="kpi-title">Taxa Boa (Sc 4 a 5)</div>
-                        <div class="kpi-value" style="color: #01704d;" id="kpiBoa">0%</div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="row">
-                <div class="col-12">
-                    <div class="custom-card">
-                        <div class="chart-title">Evolução Diária de Qualidade (Últimos 30 Dias)</div>
-                        <div class="chart-container-large"><canvas id="graficoLinha"></canvas></div>
-                    </div>
-                </div>
-                
-                <div class="col-md-4">
-                    <div class="custom-card">
-                        <div class="chart-title">Distribuição Global de Scores</div>
-                        <div class="chart-container"><canvas id="graficoPizza"></canvas></div>
-                    </div>
-                </div>
-
-                <div class="col-md-4">
-                    <div class="custom-card">
-                        <div class="chart-title">Análise por Fila de Atendimento</div>
-                        <div class="scroll-wrapper">
-                            <div class="chart-container" id="containerFila"><canvas id="graficoFila"></canvas></div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-md-4">
-                    <div class="custom-card">
-                        <div class="chart-title">Análise por Mailing Base</div>
-                        <div class="scroll-wrapper">
-                            <div class="chart-container" id="containerMailing"><canvas id="graficoMailing"></canvas></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-        </div>
-        <div class="tab-pane fade" id="custo">
-            <div class="row mb-2">
-                <div class="col-md-3">
-                    <div class="custom-card">
-                        <div class="kpi-title">Custo Crítico (Sc 0 e 1)</div>
-                        <div class="kpi-value" style="color: #CC3262;" id="kpiCriticaCusto">R$ 0,00</div>
-                    </div>
-                </div>
-                <div class="col-md-3">
-                    <div class="custom-card">
-                        <div class="kpi-title">Custo Ruim (Sc 1.5)</div>
-                        <div class="kpi-value" style="color: #FF8400;" id="kpiRuimCusto">R$ 0,00</div>
-                    </div>
-                </div>
-                <div class="col-md-3">
-                    <div class="custom-card">
-                        <div class="kpi-title">Custo Médio (Sc 2 a 3)</div>
-                        <div class="kpi-value" style="color: #007380;" id="kpiMediaCusto">R$ 0,00</div>
-                    </div>
-                </div>
-                <div class="col-md-3">
-                    <div class="custom-card">
-                        <div class="kpi-title">Custo Bom (Sc 4 a 5)</div>
-                        <div class="kpi-value" style="color: #01704d;" id="kpiBoaCusto">R$ 0,00</div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="row">
-                <div class="col-12">
-                    <div class="custom-card">
-                        <div class="chart-title">Evolução Diária de Investimento (R$)</div>
-                        <div class="chart-container-large"><canvas id="graficoLinhaCusto"></canvas></div>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="custom-card">
-                        <div class="chart-title">Distribuição do Custo por Score</div>
-                        <div class="chart-container"><canvas id="graficoPizzaCusto"></canvas></div>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="custom-card">
-                        <div class="chart-title">Custo por Fila (R$)</div>
-                        <div class="scroll-wrapper">
-                            <div class="chart-container" id="containerFilaCusto"><canvas id="graficoFilaCusto"></canvas></div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="custom-card">
-                        <div class="chart-title">Custo por Mailing (R$)</div>
-                        <div class="scroll-wrapper">
-                            <div class="chart-container" id="containerMailingCusto"><canvas id="graficoMailingCusto"></canvas></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="tab-pane fade" id="extracao">
-            <div class="row">
-                
-                <div class="col-md-6">
-                    <div class="custom-card h-100">
-                        <h4 class="mb-3">Resumo de Discagens por Score</h4>
-                        <p class="text-muted" style="font-size: 0.9rem;">
-                            Exporta os dados consolidados (tabela de carteiras). 
-                            <strong>Atenção:</strong> Esta extração obedece os filtros que você deixou selecionados lá na Aba 1 (Dashboard).
-                        </p>
-                        <button class="btn btn-corporativo mt-3" onclick="exportarResumo()">📥 Baixar Resumo (CSV)</button>
-                    </div>
-                </div>
-
-                <div class="col-md-6">
-                    <div class="custom-card h-100">
-                        <h4 class="mb-3">Exportação de Números Discados</h4>
-                        <p class="text-muted" style="font-size: 0.9rem;">
-                            Exporta os telefones únicos de um dia específico. 
-                            (Data, Executivo e Carteira são obrigatórios).
-                        </p>
-                        
-                        <div class="row g-2 mb-3">
-                            <div class="col-md-6">
-                                <label class="form-label mb-1">Data *</label>
-                                <select id="extData" class="form-select form-select-sm"></select>
-                            </div>
-                            <div class="col-md-6">
-                                <label class="form-label mb-1">Executivo *</label>
-                                <select id="extExec" class="form-select form-select-sm" onchange="atualizarCarteirasExtracao()"><option value="">Selecione...</option></select>
-                            </div>
-                            <div class="col-md-6">
-                                <label class="form-label mb-1">Carteira *</label>
-                                <select id="extCart" class="form-select form-select-sm" onchange="atualizarOpcionaisExtracao()"><option value="">Selecione Executivo primeiro...</option></select>
-                            </div>
-                            <div class="col-md-6">
-                                <label class="form-label mb-1">Score (Opcional)</label>
-                                <select id="extScore" class="form-select form-select-sm">
-                                    <option value="">Todos</option>
-                                </select>
-                            </div>
-                            <div class="col-md-6">
-                                <label class="form-label mb-1">Fila (Opcional)</label>
-                                <select id="extFila" class="form-select form-select-sm"><option value="">Todas</option></select>
-                            </div>
-                            <div class="col-md-6">
-                                <label class="form-label mb-1">Mailing (Opcional)</label>
-                                <select id="extMailing" class="form-select form-select-sm"><option value="">Todos</option></select>
-                            </div>
-                        </div>
-
-                        <button id="btnGerarExt" class="btn btn-corporativo mt-3" onclick="exportarNumeros()">📥 Gerar Base (CSV)</button>
-                        <span id="loadingExt" class="ms-2 text-secondary" style="display: none; font-size: 0.85rem;">⏳ Buscando no banco, aguarde...</span>
-                    </div>
-                </div>
-
-            </div>
-            <div class="row mt-4">
-                <div class="col-12">
-                    <div class="custom-card">
-                        <h4 class="mb-3">Consulta de Score por Número</h4>
-                        <p class="text-muted" style="font-size: 0.9rem;">
-                            Consulte o score de números específicos digitando um telefone único ou subindo um arquivo <b>.txt</b> com uma lista (um número por linha).
-                        </p>
-                        
-                        <div class="row g-3 align-items-center mb-3">
-                            <div class="col-md-3">
-                                <label class="form-label mb-1">Número Único</label>
-                                <input type="text" id="inputNumeroScore" class="form-control" placeholder="Ex: 41996713055">
-                            </div>
-                            <div class="col-md-4">
-                                <label class="form-label mb-1">Ou Lote (Arquivo .txt)</label>
-                                <input type="file" id="inputFileScore" class="form-control" accept=".txt">
-                            </div>
-                            <div class="col-md-3">
-                                <label class="form-label d-block mb-1">&nbsp;</label>
-                                <button class="btn btn-outline-secondary btn-sm" onclick="baixarModeloTXT()">📄 Baixar Modelo TXT</button>
-                            </div>
-                        </div>
-
-                        <button id="btnConsultarScore" class="btn btn-corporativo" onclick="consultarScoreNumeros()">🔍 Consultar Base (CSV)</button>
-                        <span id="loadingScore" class="ms-2 text-secondary" style="display: none; font-size: 0.85rem;">⏳ Vasculhando base, aguarde...</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-
-<script src="script.js"></script>
+    <script src="script.js"></script>
 </body>
+
 </html>
